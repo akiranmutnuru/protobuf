@@ -167,7 +167,9 @@ def _AddSlots(message_descriptor, dictionary):
                              '_is_present_in_parent',
                              '_listener',
                              '_listener_for_children',
-                             '__weakref__']
+                             '__weakref__',
+                             '__getstate__',
+                             '__setstate__']
 
 
 def _IsMessageSetExtension(field):
@@ -783,6 +785,17 @@ def _AddMergeFromStringMethod(message_descriptor, cls):
     return pos
   cls._InternalParse = InternalParse
 
+def _AddGetStateMethod(cls):
+    def get_state(self):
+        return self.SerializePartialToString()
+    cls.__getstate__ = get_state
+    
+def _AddSetStateMethod(cls):
+    def set_state(self, data):
+        self.__init__()
+        self.ParseFromString(data)
+        return self.SerializePartialToString()
+    cls.__setstate__ = set_state
 
 def _AddIsInitializedMethod(message_descriptor, cls):
   """Adds the IsInitialized and FindInitializationError methods to the
@@ -920,6 +933,8 @@ def _AddMessageMethods(message_descriptor, cls):
   _AddMergeFromStringMethod(message_descriptor, cls)
   _AddIsInitializedMethod(message_descriptor, cls)
   _AddMergeFromMethod(cls)
+  _AddGetStateMethod(cls)
+  _AddSetStateMethod(cls)
 
 
 def _AddPrivateHelperMethods(cls):

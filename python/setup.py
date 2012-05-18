@@ -135,7 +135,7 @@ if __name__ == '__main__':
           'google.protobuf.internal.wire_format',
           'google.protobuf.descriptor',
           'google.protobuf.descriptor_pb2',
-          'google.protobuf.compiler.plugin_pb2',
+          #'google.protobuf.compiler.plugin_pb2',
           'google.protobuf.message',
           'google.protobuf.reflection',
           'google.protobuf.service',
